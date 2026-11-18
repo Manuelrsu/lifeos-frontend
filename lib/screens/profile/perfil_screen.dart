@@ -33,9 +33,10 @@ class PerfilScreen extends StatelessWidget {
     final preferencias = context.read<PreferenciasProvider>();
     final elegido = await showModalBottomSheet<int>(
       context: context,
+      isScrollControlled: true,
       builder: (contexto) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          shrinkWrap: true,
           children: [
             const Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 8),

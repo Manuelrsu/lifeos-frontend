@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/habitos_provider.dart';
 import '../providers/mi_dia_provider.dart';
 import '../providers/navegacion_provider.dart';
 import '../providers/smartstudy_provider.dart';
@@ -31,6 +32,8 @@ class _MainShellState extends State<MainShell> {
           await context.read<MiDiaProvider>().cargar(silencioso: true);
         case NavegacionProvider.smartStudy:
           await context.read<SmartStudyProvider>().cargar(silencioso: true);
+        case NavegacionProvider.habitos:
+          await context.read<HabitosProvider>().cargar(silencioso: true);
       }
     } on ApiException {
       // Sin conexión: se mantiene lo último que se cargó
