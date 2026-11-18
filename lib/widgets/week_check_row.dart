@@ -40,7 +40,7 @@ class WeekCheckRow extends StatelessWidget {
               button: activo,
               label: '${nombres[i]}${esHoy ? ' (hoy)' : ''}: ${hecho ? 'cumplido' : 'sin cumplir'}',
               child: Material(
-                color: hecho ? AppColors.menta : AppColors.superficie,
+                color: hecho ? AppColors.menta : AppColors.hueco,
                 borderRadius: BorderRadius.circular(10),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(10),

@@ -24,6 +24,10 @@ Funciones que la app podría aprovechar, pero que el backend actual **no tiene**
 - **Hoy:** el sueño solo guarda `horas`. La app no pide ni muestra horas de inicio y fin.
 - **Propuesta:** columnas opcionales `hora_dormir` y `hora_despertar` (`TIME`), con el cuerpo `{"horas": 7.5, "hora_dormir": "23:30", "hora_despertar": "07:00"}`.
 
-## 6. Sumar agua de forma atómica
+## 6. Mi Día: tareas completadas hoy
+- **Hoy:** `GET /api/mi-dia` solo trae las tareas **pendientes**, así que el anillo de progreso del día no incluye tareas.
+- **Propuesta:** agregar `datos.tareas.completadas_hoy` (tareas con `estado = completada` y `fecha_entrega = fecha`) y `datos.tareas.total_hoy`.
+
+## 7. Sumar agua de forma atómica
 - **Hoy:** «+1 vaso» lee el total del día y luego hace `POST` (si no hay registro) o `PUT` con el total nuevo. Si dos teléfonos lo tocan a la vez, uno de los dos cambios puede perderse.
 - **Propuesta** (ya está en las mejoras futuras del backend): `POST /api/salud/hidratacion/<fecha>/sumar` con el cuerpo `{"cantidad_ml": 250}` → el registro actualizado (lo crea si no existía).

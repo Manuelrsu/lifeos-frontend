@@ -321,7 +321,7 @@ class _Acceso extends StatelessWidget {
               Container(
                 width: 36,
                 height: 36,
-                decoration: const BoxDecoration(color: AppColors.superficie, shape: BoxShape.circle),
+                decoration: const BoxDecoration(color: AppColors.hueco, shape: BoxShape.circle),
                 child: ocupado
                     ? const Padding(padding: EdgeInsets.all(9), child: CircularProgressIndicator(strokeWidth: 2))
                     : Icon(icono, size: 18, color: AppColors.menta),

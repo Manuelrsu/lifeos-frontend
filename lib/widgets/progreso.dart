@@ -57,7 +57,7 @@ class _PintorAnillo extends CustomPainter {
     final rect = Rect.fromLTWH(grosor / 2, grosor / 2, size.width - grosor, size.height - grosor);
 
     final fondo = Paint()
-      ..color = AppColors.superficie
+      ..color = AppColors.hueco
       ..style = PaintingStyle.stroke
       ..strokeWidth = grosor;
     canvas.drawArc(rect, 0, 2 * math.pi, false, fondo);
@@ -102,7 +102,7 @@ class MiniProgressBar extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           builder: (context, v, _) => LinearProgressIndicator(
             value: v,
-            backgroundColor: AppColors.superficie,
+            backgroundColor: AppColors.hueco,
             color: color,
             minHeight: 6,
           ),

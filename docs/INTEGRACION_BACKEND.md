@@ -111,3 +111,17 @@ Fuente: el **código** de `lifeos-backend` (controllers, services y models), rev
 | Salud, Actividad: resumen 2×2 | `GET /api/salud/estadisticas?dias=7` | Conectado |
 | Salud, Entrenamiento: registrar, historial y eliminar | `/api/salud/actividades` | Conectado |
 | Salud: recomendaciones del backend | `recomendaciones` en `/estadisticas` | **No se muestran** (CLAUDE.md: nada de recomendaciones de salud) |
+
+## 4. Cómo se verificó (18-nov-2026)
+
+- **Contra el backend real:** `dart run tool/smoke_test.dart` usa los mismos servicios y modelos de la app. Dio **38 de 38 OK** en dos ejecuciones (Fases 4 y 8), cubriendo autenticación, perfil, SmartStudy, hábitos, salud, Mi Día y la revocación del token.
+- **En el emulador Android (API 37):** se instaló el APK de debug con el backend local encendido. Se registró una cuenta desde la app, se abrió Mi Día con datos reales, se sumó un vaso (que luego apareció en Salud, leído del servidor), se creó un hábito y se marcó hoy (con la racha de 1 día calculada por el backend). Las capturas están en `docs/capturas/`.
+- **Con servidor falso (`MockClient`):** 75 pruebas automáticas (`flutter test`) de modelos, servicios, providers y pantallas, con respuestas que tienen la forma exacta de las del backend.
+- **Sin probar en la app real:** los formularios de materia, tarea y evaluación, la edición de perfil, el cambio de contraseña y la pestaña Descanso no se recorrieron en el emulador. Sí están cubiertos por la prueba de humo (servicios) o por pruebas de widget.
+
+## 5. Decisiones al integrar
+
+- **Progreso del día en Mi Día** = promedio del % de hábitos (si hay hábitos activos) y del % de agua (máximo 100 %). Las tareas no entran: el backend solo informa las **pendientes**, no cuántas se completaron hoy.
+- **«+1 vaso»:** el backend guarda **un total por día**. La app lee el total (`GET /hidratacion/<fecha>`); si no existe hace `POST`, y si existe hace `PUT` con el total nuevo.
+- **Actividad y Entrenamiento** comparten el mismo registro (`/api/salud/actividades`). Actividad muestra el resumen de 7 días y Entrenamiento el historial con alta, edición y borrado.
+- **Fecha de «hoy»:** la app siempre envía la fecha del teléfono (`?fecha=` o `fecha` en el cuerpo), como recomienda la guía para Flutter del backend.

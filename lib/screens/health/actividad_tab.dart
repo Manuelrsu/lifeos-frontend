@@ -69,7 +69,7 @@ class ActividadTab extends StatelessWidget {
                                 height: maximo == 0 ? 4 : 4 + 76 * b.minutos / maximo,
                                 decoration: BoxDecoration(
                                   gradient: b.minutos > 0 ? AppColors.degradadoSalud : null,
-                                  color: b.minutos > 0 ? null : AppColors.superficie,
+                                  color: b.minutos > 0 ? null : AppColors.hueco,
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                               ),

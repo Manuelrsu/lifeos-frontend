@@ -10,6 +10,10 @@ class AppColors {
   static const Color tarjetaClara = Color(0xFF262626); // inicio del degradado de las tarjetas
   static const Color tarjetaOscura = Color(0xFF1A1A1A); // fin del degradado y barra inferior
   static const Color superficie = Color(0xFF252525); // chips, campos y botones de icono
+
+  /// Fondo de los elementos que van DENTRO de una tarjeta (cuadros de la semana, pistas
+  /// de las barras y anillos). Es más oscuro que la tarjeta para que se distingan (ref. 03).
+  static const Color hueco = Color(0xFF141414);
   static const Color borde = Color(0x0FFFFFFF); // blanco al 6 %
 
   static const Color texto = Color(0xFFF5F5F5);

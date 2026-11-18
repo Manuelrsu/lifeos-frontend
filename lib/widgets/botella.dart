@@ -58,7 +58,7 @@ class _PintorBotella extends CustomPainter {
       ..close();
 
     // Fondo de la botella
-    canvas.drawPath(forma, Paint()..color = AppColors.superficie);
+    canvas.drawPath(forma, Paint()..color = AppColors.hueco);
 
     // Agua: un rectángulo recortado con la forma de la botella
     if (valor > 0) {

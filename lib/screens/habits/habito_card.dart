@@ -89,7 +89,7 @@ class HabitoCard extends StatelessWidget {
                 Container(
                   width: 40,
                   height: 40,
-                  decoration: BoxDecoration(color: AppColors.superficie, borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(color: AppColors.suave(AppColors.menta), borderRadius: BorderRadius.circular(12)),
                   child: const Icon(Icons.repeat_rounded, color: AppColors.menta, size: 20),
                 ),
                 const SizedBox(width: 12),
@@ -145,7 +145,7 @@ class HabitoCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Material(
-                    color: AppColors.superficie,
+                    color: AppColors.hueco,
                     borderRadius: BorderRadius.circular(10),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(10),
@@ -176,7 +176,7 @@ class _InsigniaRacha extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(color: AppColors.superficie, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(color: AppColors.hueco, borderRadius: BorderRadius.circular(8)),
       child: Text('🔥 $dias d', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
     );
   }
