@@ -1,0 +1,35 @@
+# Copia de respaldo del material inicial (no hace falta en el repositorio)
+frontend-lifeos-inicio.zip
+
+# Archivos de Flutter/Dart generados al compilar
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+coverage/
+
+# Android (archivos locales y generados)
+android/.gradle/
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+android/app/debug
+android/app/profile
+android/app/release
+android/key.properties
+*.jks
+*.keystore
+
+# Editores y sistema
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
