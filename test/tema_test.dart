@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/testing.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:lifeos/main.dart';
+import 'package:lifeos/services/almacen_sesion.dart';
+import 'package:lifeos/services/api_service.dart';
 import 'package:lifeos/theme/app_theme.dart';
 import 'package:lifeos/widgets/chips.dart';
 import 'package:lifeos/widgets/estados.dart';
@@ -25,11 +29,16 @@ void main() {
       expect(tema.inputDecorationTheme.fillColor, AppColors.superficie);
     });
 
-    testWidgets('la app arranca con el tema oscuro y en español', (tester) async {
-      await tester.pumpWidget(const LifeOSApp());
+    testWidgets('la app arranca con el tema oscuro, en español y sin sesión va a la Bienvenida', (tester) async {
+      FlutterSecureStorage.setMockInitialValues({}); // sin token guardado
+      final api = ApiService(cliente: MockClient((_) async => throw StateError('no debería llamar al servidor')));
+      await tester.pumpWidget(LifeOSApp(api: api, almacen: AlmacenSesion()));
+      await tester.pumpAndSettle();
+
       final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(app.themeMode, ThemeMode.dark);
       expect(app.locale, const Locale('es', 'CO'));
+      expect(find.text('Todo tu progreso en una sola aplicación'), findsOneWidget);
 
       final contexto = tester.element(find.byType(Scaffold).first);
       expect(Theme.of(contexto).brightness, Brightness.dark);
