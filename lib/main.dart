@@ -9,6 +9,7 @@ import 'providers/habitos_provider.dart';
 import 'providers/mi_dia_provider.dart';
 import 'providers/navegacion_provider.dart';
 import 'providers/preferencias_provider.dart';
+import 'providers/salud_provider.dart';
 import 'providers/smartstudy_provider.dart';
 import 'screens/auth/bienvenida_screen.dart';
 import 'screens/auth/splash_screen.dart';
@@ -62,6 +63,7 @@ class LifeOSApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => SmartStudyProvider(servicio: s.smartStudy, preferencias: s.preferencias)),
         ChangeNotifierProvider(create: (_) => HabitosProvider(s.habitos)),
+        ChangeNotifierProvider(create: (_) => SaludProvider(s.salud)),
         // AuthProvider va al final para poder limpiar a los demás al cerrar sesión
         ChangeNotifierProvider(
           create: (contexto) {
@@ -72,6 +74,7 @@ class LifeOSApp extends StatelessWidget {
               contexto.read<MiDiaProvider>().limpiar();
               contexto.read<SmartStudyProvider>().limpiar();
               contexto.read<HabitosProvider>().limpiar();
+              contexto.read<SaludProvider>().limpiar();
             };
             auth.cargarSesionGuardada();
             return auth;

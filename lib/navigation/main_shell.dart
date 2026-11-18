@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/habitos_provider.dart';
 import '../providers/mi_dia_provider.dart';
 import '../providers/navegacion_provider.dart';
+import '../providers/salud_provider.dart';
 import '../providers/smartstudy_provider.dart';
 import '../screens/habits/habitos_screen.dart';
 import '../screens/health/salud_screen.dart';
@@ -34,6 +35,8 @@ class _MainShellState extends State<MainShell> {
           await context.read<SmartStudyProvider>().cargar(silencioso: true);
         case NavegacionProvider.habitos:
           await context.read<HabitosProvider>().cargar(silencioso: true);
+        case NavegacionProvider.salud:
+          await context.read<SaludProvider>().cargar(silencioso: true);
       }
     } on ApiException {
       // Sin conexión: se mantiene lo último que se cargó

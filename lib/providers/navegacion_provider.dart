@@ -19,6 +19,11 @@ class NavegacionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void cambiarPestanaSalud(int nueva) {
+    pestanaSalud = nueva;
+    notifyListeners();
+  }
+
   /// Al cerrar sesión se vuelve a Mi Día.
   void reiniciar() {
     indice = miDia;
