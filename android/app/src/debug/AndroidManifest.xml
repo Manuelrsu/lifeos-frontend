@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- INTERNET lo necesita la herramienta de Flutter para la recarga en caliente. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- SOLO EN DEBUG: permite HTTP sin cifrar para hablar con el backend local
+         (http://10.0.2.2:5000). Android lo bloquea por defecto. La versión release
+         no lleva esta línea: en producción la API debe ir por HTTPS. -->
+    <application android:usesCleartextTraffic="true" />
+</manifest>
