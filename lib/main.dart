@@ -5,17 +5,19 @@ import 'package:provider/provider.dart';
 
 import 'navigation/main_shell.dart';
 import 'providers/auth_provider.dart';
+import 'providers/mi_dia_provider.dart';
 import 'providers/navegacion_provider.dart';
+import 'providers/preferencias_provider.dart';
 import 'screens/auth/bienvenida_screen.dart';
 import 'screens/auth/splash_screen.dart';
 import 'services/almacen_sesion.dart';
 import 'services/api_service.dart';
-import 'services/auth_service.dart';
+import 'services/servicios.dart';
 import 'theme/app_theme.dart';
 import 'utils/mensajes.dart';
 
-/// Llaves globales para navegar y mostrar mensajes desde fuera de una pantalla
-/// (por ejemplo, cuando la sesión expira en medio de cualquier pantalla).
+/// Llave global del navegador: permite cerrar todas las pantallas abiertas
+/// cuando la sesión se cierra o expira, desde fuera de cualquier pantalla.
 final claveNavegador = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
@@ -24,29 +26,46 @@ Future<void> main() async {
   await initializeDateFormatting('es_CO');
 
   // Un solo ApiService para toda la app (comparte el token)
-  final api = ApiService();
-  runApp(LifeOSApp(api: api, almacen: AlmacenSesion()));
+  runApp(LifeOSApp(servicios: Servicios(ApiService()), almacen: AlmacenSesion()));
 }
 
-/// Raíz de la app: crea los providers, aplica el tema oscuro y el idioma español.
+/// Raíz de la app: registra servicios y providers, aplica el tema oscuro y el español.
 class LifeOSApp extends StatelessWidget {
-  const LifeOSApp({super.key, required this.api, required this.almacen});
+  const LifeOSApp({super.key, required this.servicios, required this.almacen});
 
-  final ApiService api;
+  final Servicios servicios;
   final AlmacenSesion almacen;
 
   @override
   Widget build(BuildContext context) {
+    final s = servicios;
     return MultiProvider(
       providers: [
+        // Servicios (sin estado): las pantallas los leen con context.read<...>()
+        Provider.value(value: s.auth),
+        Provider.value(value: s.smartStudy),
+        Provider.value(value: s.habitos),
+        Provider.value(value: s.salud),
+        // Estado de la app (ChangeNotifier): las pantallas se redibujan cuando cambia
         ChangeNotifierProvider(create: (_) => NavegacionProvider()),
+        ChangeNotifierProvider(create: (_) => PreferenciasProvider(s.preferencias)..cargar()),
+        ChangeNotifierProvider(
+          create: (_) => MiDiaProvider(
+            servicio: s.miDia,
+            smartStudy: s.smartStudy,
+            habitos: s.habitos,
+            salud: s.salud,
+            preferencias: s.preferencias,
+          ),
+        ),
+        // AuthProvider va al final para poder limpiar a los demás al cerrar sesión
         ChangeNotifierProvider(
           create: (contexto) {
-            final auth = AuthProvider(api: api, servicio: AuthService(api), almacen: almacen);
-            // Al cerrar sesión: cerrar las pantallas abiertas y volver a Mi Día
+            final auth = AuthProvider(api: s.api, servicio: s.auth, almacen: almacen);
             auth.alCerrarSesion = () {
               claveNavegador.currentState?.popUntil((ruta) => ruta.isFirst);
               contexto.read<NavegacionProvider>().reiniciar();
+              contexto.read<MiDiaProvider>().limpiar();
             };
             auth.cargarSesionGuardada();
             return auth;

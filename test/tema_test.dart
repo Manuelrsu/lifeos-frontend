@@ -6,6 +6,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:lifeos/main.dart';
 import 'package:lifeos/services/almacen_sesion.dart';
 import 'package:lifeos/services/api_service.dart';
+import 'package:lifeos/services/servicios.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lifeos/theme/app_theme.dart';
 import 'package:lifeos/widgets/chips.dart';
 import 'package:lifeos/widgets/estados.dart';
@@ -31,8 +33,9 @@ void main() {
 
     testWidgets('la app arranca con el tema oscuro, en español y sin sesión va a la Bienvenida', (tester) async {
       FlutterSecureStorage.setMockInitialValues({}); // sin token guardado
+      SharedPreferences.setMockInitialValues({});
       final api = ApiService(cliente: MockClient((_) async => throw StateError('no debería llamar al servidor')));
-      await tester.pumpWidget(LifeOSApp(api: api, almacen: AlmacenSesion()));
+      await tester.pumpWidget(LifeOSApp(servicios: Servicios(api), almacen: AlmacenSesion()));
       await tester.pumpAndSettle();
 
       final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
