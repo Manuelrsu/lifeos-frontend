@@ -8,6 +8,7 @@ import 'providers/auth_provider.dart';
 import 'providers/mi_dia_provider.dart';
 import 'providers/navegacion_provider.dart';
 import 'providers/preferencias_provider.dart';
+import 'providers/smartstudy_provider.dart';
 import 'screens/auth/bienvenida_screen.dart';
 import 'screens/auth/splash_screen.dart';
 import 'services/almacen_sesion.dart';
@@ -58,6 +59,7 @@ class LifeOSApp extends StatelessWidget {
             preferencias: s.preferencias,
           ),
         ),
+        ChangeNotifierProvider(create: (_) => SmartStudyProvider(servicio: s.smartStudy, preferencias: s.preferencias)),
         // AuthProvider va al final para poder limpiar a los demás al cerrar sesión
         ChangeNotifierProvider(
           create: (contexto) {
@@ -66,6 +68,7 @@ class LifeOSApp extends StatelessWidget {
               claveNavegador.currentState?.popUntil((ruta) => ruta.isFirst);
               contexto.read<NavegacionProvider>().reiniciar();
               contexto.read<MiDiaProvider>().limpiar();
+              contexto.read<SmartStudyProvider>().limpiar();
             };
             auth.cargarSesionGuardada();
             return auth;

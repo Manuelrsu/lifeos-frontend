@@ -1,8 +1,16 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lifeos/main.dart';
+import 'package:lifeos/services/almacen_sesion.dart';
 import 'package:lifeos/services/api_service.dart';
+import 'package:lifeos/services/servicios.dart';
+import 'package:lifeos/utils/fechas.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Respuesta de éxito con el formato del backend: {"ok": true, "mensaje": ..., "datos": ...}.
 http.Response exito(Object? datos, {int codigo = 200, String mensaje = 'OK'}) => http.Response.bytes(
@@ -103,3 +111,45 @@ Map<String, dynamic> tareaJson(int id, String titulo, String fecha, {int materia
     };
 
 const usuarioJson = {'id': 7, 'nombre': 'Ana Pérez', 'correo': 'ana@correo.com', 'fecha_creacion': '2026-11-16T15:00:00Z'};
+
+/// Rutas mínimas para que la app abra con sesión: usuario y todo vacío.
+Map<String, http.Response Function(http.Request)> rutasBase() => {
+      'GET /api/usuarios/me': (_) => exito(usuarioJson),
+      'GET /api/mi-dia': (_) => exito(miDiaJson(fecha: Fechas.aApi(Fechas.hoy()))),
+      'GET /api/smartstudy/materias': (_) => exito([]),
+      'GET /api/smartstudy/tareas': (_) => exito([]),
+      'GET /api/smartstudy/evaluaciones': (_) => exito([]),
+      'GET /api/habitos': (_) => exito([]),
+      'GET /api/salud/hidratacion': (_) => exito([]),
+      'GET /api/salud/sueno': (_) => exito([]),
+      'GET /api/salud/actividades': (_) => exito([]),
+      'GET /api/salud/estadisticas': (_) => exito(estadisticasSaludJson()),
+    };
+
+Map<String, dynamic> estadisticasSaludJson({int minutos = 0, int sesiones = 0, int diasActivos = 0}) => {
+      'dias': 7,
+      'desde': Fechas.aApi(Fechas.hoy().subtract(const Duration(days: 6))),
+      'hasta': Fechas.aApi(Fechas.hoy()),
+      'hidratacion': {'promedio_ml': null, 'dias_con_registro': 0, 'dias_meta_cumplida': 0, 'meta_ml': 2000},
+      'sueno': {'promedio_horas': null, 'dias_con_registro': 0},
+      'actividad': {'total_actividades': sesiones, 'minutos_totales': minutos, 'dias_activos': diasActivos},
+      'recomendaciones': ['Sugerencia general'],
+      'aviso': 'Estas son sugerencias generales de bienestar, no consejos médicos.',
+    };
+
+/// Abre la app completa con un token guardado (sesión iniciada) y el servidor falso.
+/// [rutas] reemplaza o agrega rutas a las de [rutasBase].
+Future<ServidorFalso> abrirAppConSesion(WidgetTester tester, Map<String, http.Response Function(http.Request)> rutas) async {
+  FlutterSecureStorage.setMockInitialValues({'token_lifeos': 'tok'});
+  SharedPreferences.setMockInitialValues({});
+  final servidor = ServidorFalso({...rutasBase(), ...rutas});
+  await tester.pumpWidget(LifeOSApp(servicios: Servicios(servidor.crearApi()), almacen: AlmacenSesion()));
+  await tester.pumpAndSettle();
+  return servidor;
+}
+
+/// Toca una pestaña de la barra inferior por su nombre.
+Future<void> irAPestana(WidgetTester tester, String nombre) async {
+  await tester.tap(find.descendant(of: find.byType(NavigationBar), matching: find.text(nombre)));
+  await tester.pumpAndSettle();
+}

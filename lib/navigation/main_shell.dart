@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/mi_dia_provider.dart';
 import '../providers/navegacion_provider.dart';
+import '../providers/smartstudy_provider.dart';
 import '../screens/habits/habitos_screen.dart';
 import '../screens/health/salud_screen.dart';
 import '../screens/home/mi_dia_screen.dart';
@@ -28,6 +29,8 @@ class _MainShellState extends State<MainShell> {
       switch (indice) {
         case NavegacionProvider.miDia:
           await context.read<MiDiaProvider>().cargar(silencioso: true);
+        case NavegacionProvider.smartStudy:
+          await context.read<SmartStudyProvider>().cargar(silencioso: true);
       }
     } on ApiException {
       // Sin conexión: se mantiene lo último que se cargó
