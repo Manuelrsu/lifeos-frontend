@@ -145,3 +145,8 @@ Más detalles en `docs/INTEGRACION_BACKEND.md` y `docs/PENDIENTES_BACKEND.md`.
 | Gradle: `PKIX path building failed` | Un antivirus (Avast) inspecciona HTTPS. Se resolvió con una copia de los certificados de Java más el de Avast, configurada en `D:\Android\gradle\gradle.properties` |
 | El emulador no arranca o va muy lento | Falta la aceleración: instala el *Android Emulator hypervisor driver* (sección 2) |
 | C: se llena al compilar | `pagefile.sys` crece si se juntan el emulador, Android Studio y Gradle. Cierra lo que no uses y reinicia Windows para que se reduzca |
+
+
+## Uso de herramientas de IA
+
+Este Frontend se desarrolló con ayuda de Claude (asistente de IA) para generar parte del código y documentación. Yo ejecuté las pruebas, supervise todo y estoy estudiando el codigo.
