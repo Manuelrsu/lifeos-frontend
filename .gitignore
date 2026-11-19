@@ -33,3 +33,7 @@ android/key.properties
 .DS_Store
 Thumbs.db
 *.log
+
+# Guía para Claude Code (solo local)
+CLAUDE.md
+frontend-lifeos-inicio.zip
